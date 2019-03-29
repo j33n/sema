@@ -1,13 +1,26 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const {
+	check,
+	validationResult
+} = require('express-validator/check');
 
 // Require controller modules.
-var user_controller = require('../controllers/user');
+const user_controller = require('../controllers/user');
+
+const userDetailsValidator = [
+	// username must be an email
+	check('username').isEmail(),
+	// password must be at least 5 chars long
+	check('password').isLength({
+		min: 5
+	})
+]
 
 /// USER ROUTES ///
 
 // User registration
-router.post('/sign-in', user_controller.registration);
+router.post('/sign-up', userDetailsValidator, user_controller.registration);
 
 // User login
 router.post('/log-in', user_controller.login);

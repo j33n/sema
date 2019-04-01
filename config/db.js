@@ -34,11 +34,11 @@ db.once('open', function() {
 				})
 		}
 
-		before(function(done) {
+		beforeEach(function(done) {
 			return clearDB(done);
 		});
 
-		after(function(done) {
+		afterEach(function(done) {
 			return clearDB(done);
 		});
 	}

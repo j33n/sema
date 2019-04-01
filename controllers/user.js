@@ -5,28 +5,45 @@ const {
 const {
 	sanitizeBody
 } = require('express-validator/filter');
+const bcrypt = require('bcrypt');
 
 const Users = require('../models/users');
 
 // Handles registering a user
 exports.registration = function(req, res) {
 	const errors = validationResult(req);
+	const saltRounds = process.env.BCRYPT_SALT_ROUNDS;
 	if (!errors.isEmpty()) {
 		return res.status(422).json({
 			errors: errors.array()
 		});
 	}
 
-	Users.create({
-		username: req.body.username,
-		phone: req.body.phone,
-		password: req.body.password
-	}).then(user => res.status(201).json(user));
-
-	// res.json({
-	// 	username: req.body.username,
-	// 	password: req.body.password
-	// })
+	bcrypt.hash(req.body.password, parseInt(saltRounds))
+		.then(function(hash) {
+			Users.find({ username: req.body.username }, (error, user) => {
+				if (error) {
+					return res.status(400).json({
+						errors: error.message
+					})
+				}
+				if (user.length > 0) {
+					return res.status(400).json({
+						errors: "User account already exists"
+					})
+				}
+				Users.create({
+					username: req.body.username,
+					phone: req.body.phone,
+					password: hash,
+				}).then(user => res.status(201).json(user));
+			});
+			
+		}).catch(function(error) {
+			return res.status(400).json({
+				errors: error.message
+			})
+		});
 }
 
 // Handles logging in a user

@@ -17,15 +17,11 @@ describe("Users", () => {
 				phone: '123456',
 			})
 			.end((err, res) => {
-				console.log('----------', res.body)
-				res.should.have.status(422);
+				res.should.have.status(201);
 				res.body.should.be.a('object');
-				// expect(res.body).to.haveOwnProperty('errors').to.be.an('array').to.deep.include({
-				// 	location: 'body',
-				// 	param: 'username',
-				// 	value: 'lorem',
-				// 	msg: 'Invalid value'
-				// });
+				expect(res.body).to.deep.include({
+					username: 'johndoe@test.com',
+				});
 				done();
 			});
 	});

@@ -6,6 +6,8 @@ const {
 	sanitizeBody
 } = require('express-validator/filter');
 
+const Users = require('../models/users');
+
 // Handles registering a user
 exports.registration = function(req, res) {
 	const errors = validationResult(req);
@@ -15,15 +17,16 @@ exports.registration = function(req, res) {
 		});
 	}
 
-	// User.create({
+	Users.create({
+		username: req.body.username,
+		phone: req.body.phone,
+		password: req.body.password
+	}).then(user => res.status(201).json(user));
+
+	// res.json({
 	// 	username: req.body.username,
 	// 	password: req.body.password
-	// }).then(user => res.json(user));
-
-	res.json({
-		username: req.body.username,
-		password: req.body.password
-	})
+	// })
 }
 
 // Handles logging in a user

@@ -2,8 +2,15 @@ const {
 	validationResult
 } = require('express-validator/check');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const Users = require('../models/users');
+
+const {
+	BCRYPT_SALT_ROUNDS,
+	TOKEN_EXPIRATION,
+	SECRET,
+} = process.env;
 
 // Handles registering a user
 exports.registration = function(req, res) {
@@ -14,9 +21,7 @@ exports.registration = function(req, res) {
 		});
 	}
 
-	const saltRounds = process.env.BCRYPT_SALT_ROUNDS;
-
-	bcrypt.hash(req.body.password, parseInt(saltRounds))
+	bcrypt.hash(req.body.password, parseInt(BCRYPT_SALT_ROUNDS))
 		.then(function(hash) {
 			Users.find({
 				username: req.body.username
@@ -47,6 +52,9 @@ exports.registration = function(req, res) {
 
 // Handles logging in a user
 exports.login = function(req, res) {
+	// TODO: Save token and ensure it hasn't been used before
+	// TODO: Use a more secure token algorithm like RS256
+
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.status(422).json({
@@ -69,9 +77,21 @@ exports.login = function(req, res) {
 					errors: 'Invalid user credentials'
 				});
 			}
-			return res.status(200).json({
-				user: user,
-				message: 'success'
+
+			jwt.sign({
+				user
+			}, SECRET, {
+				expiresIn: '1h'
+			}, (err, token) => {
+				if (err) {
+					return res.status(400).json({
+						errors: err.message
+					});
+				}
+				return res.status(200).json({
+					message: 'User authenticated successfully',
+					token,
+				});
 			});
 		});
 	});

@@ -81,7 +81,7 @@ exports.login = function(req, res) {
 			jwt.sign({
 				user
 			}, SECRET, {
-				expiresIn: '1h'
+				expiresIn: TOKEN_EXPIRATION,
 			}, (err, token) => {
 				if (err) {
 					return res.status(400).json({

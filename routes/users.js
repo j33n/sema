@@ -5,6 +5,8 @@ const {
 	validationResult
 } = require('express-validator/check');
 
+require('dotenv').config();
+
 // Require controller modules.
 const user_controller = require('../controllers/user');
 

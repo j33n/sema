@@ -99,5 +99,15 @@ exports.login = function(req, res) {
 
 // Handles listing all users
 exports.list_users = function(req, res) {
-	res.send('NOT IMPLEMENTED: Author list');
+	Users.find({}, (error, user) => {
+		if (user.length > 0) {
+			return res.status(200).json({
+				users: user,
+				message: 'Users retrieved successfuly',
+			})
+		}
+		return res.status(400).json({
+			errors: 'No Users available at the moment',
+		})
+	})
 };

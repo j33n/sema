@@ -37,6 +37,6 @@ router.post('/sign-up', userRegistrationDetailsValidator, user_controller.regist
 router.post('/log-in', userLoginDetailsValidator, user_controller.login);
 
 // User listing
-router.post('/log-in', user_controller.list_users);
+router.get('/get-users', user_controller.list_users);
 
 module.exports = router;

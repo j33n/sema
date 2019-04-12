@@ -27,7 +27,7 @@ UsersSchema
 		return this.username;
 	});
 
-// Virtual for this author instance URL.
+// Virtual for this user instance url
 UsersSchema
 	.virtual('url')
 	.get(function() {

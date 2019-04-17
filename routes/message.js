@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {
 	check,
-	validationResult
+	validationResult,
+	oneOf,
 } = require('express-validator/check');
 const jwt = require('jsonwebtoken');
 
@@ -17,14 +18,20 @@ const message_controller = require('../controllers/message');
 
 /// Middlewares
 const messageValidation = [
-	check('to').isMobilePhone(),
-	check('message'),
+	check('message', 'Please provide a message'),
 ];
+
+const recipientValidation = oneOf(
+	[
+		check('to', 'Please provide a valid email or phone number').isMobilePhone(),
+		check('to', 'Please provide a valid email or phone number').isEmail(),
+	]
+)
 
 /// USER ROUTES ///
 
 // Sending message
-router.post('/', messageValidation, protectedRoute, message_controller.send_message);
+router.post('/', recipientValidation, messageValidation, protectedRoute, message_controller.send_message);
 
 // Get specific message
 router.get('/:message_id', messageValidation, protectedRoute, message_controller.get_message);

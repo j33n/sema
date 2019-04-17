@@ -6,12 +6,12 @@ const ObjectId = Schema.ObjectId;
 
 const MessageSchema = new Schema({
 	from: {
-		type: ObjectId,
+		type: String,
 		required: true,
 		max: 100
 	},
 	to: {
-		type: ObjectId,
+		type: String,
 		required: true,
 		max: 100,
 	},

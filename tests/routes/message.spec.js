@@ -38,10 +38,9 @@ describe("Should check authentication", () => {
 			.end((err, res) => {
 				res.should.have.status(500);
 				res.body.should.be.a('object');
-				console.log('res.body', res.body)
 				expect(res.body).to.deep.include({
-					message: 'jwt is not defined',
-					error: {}
+					auth: false,
+					errors: 'Failed to authenticate token.'
 				});
 				done();
 			});

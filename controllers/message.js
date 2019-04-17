@@ -2,6 +2,7 @@ const {
 	validationResult
 } = require('express-validator/check');
 
+const Users = require('../models/users');
 const Message = require('../models/message');
 
 // Send message
@@ -12,15 +13,42 @@ exports.send_message = (req, res) => {
 			errors: errors.array()
 		});
 	}
-	
-	Message.create({
-		from: req.body.from,
-		to: req.body.to,
-		message: req.body.message,
-		read: 0,
-	})
-	.then(user => res.status(201).json(user))
-	.catch((err) => res.status(400).json({ errors: err.message}));
+
+	Users.findOne({
+			$or: [{
+					username: req.body.to
+				},
+				{
+					phone: req.body.to
+				}
+			]
+		}).then((user) => {
+			Message.create({
+					from: req.userData.user._id,
+					to: user._id,
+					message: req.body.message,
+					read: 0,
+				})
+				.then(user => res.status(201).json({
+					user,
+					message: 'Message sent!'
+				}))
+				.catch((err) => res.status(400).json({
+					errors: {
+						plain: 'Unable to save message',
+						detailed: err.message,
+					}
+				}));
+
+		})
+		.catch(error => {
+			res.status(400).json({
+				errors: {
+					plain: 'User not found',
+					detailed: error.message
+				},
+			});
+		});
 }
 
 // Get a specific message
@@ -31,8 +59,8 @@ exports.get_message = (req, res) => {
 			errors: errors.array()
 		});
 	}
-	res.status(201).json(
-		{message: 'created'}
-	)
-	
+	res.status(201).json({
+		message: 'created'
+	})
+
 }

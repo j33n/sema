@@ -38,8 +38,8 @@ router.post('/', recipientValidation, messageValidation, protectedRoute, message
 // Get/Read a specific message
 router.get('/read/:message_id', protectedRoute, message_controller.get_message);
 
-// Get all users messages
-router.get('/messages', protectedRoute, message_controller.get_message);
+// Get all messages
+router.get('/all', protectedRoute, message_controller.all_messages);
 
 // Get all received messages
 router.get('/received', protectedRoute, message_controller.received_messages);

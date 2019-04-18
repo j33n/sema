@@ -1,5 +1,7 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({
+	mergeParams: true
+});
 const {
 	check,
 	validationResult,
@@ -34,19 +36,16 @@ const recipientValidation = oneOf(
 router.post('/', recipientValidation, messageValidation, protectedRoute, message_controller.send_message);
 
 // Get/Read a specific message
-router.get('/:message_id', protectedRoute, message_controller.get_message);
+router.get('/read/:message_id', protectedRoute, message_controller.get_message);
 
 // Get all users messages
 router.get('/messages', protectedRoute, message_controller.get_message);
 
 // Get all received messages
-router.get('/received', protectedRoute, message_controller.get_message);
+router.get('/received', protectedRoute, message_controller.received_messages);
 
 // Get all sent messages
 router.get('/sent', protectedRoute, message_controller.get_message);
-
-// Get all sent messages
-router.get('/read/:message_id', protectedRoute, message_controller.get_message);
 
 // Delete message
 router.delete('/delete_message/:message_id', protectedRoute, message_controller.get_message);

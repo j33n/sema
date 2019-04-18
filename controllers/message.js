@@ -74,3 +74,30 @@ exports.get_message = (req, res) => {
 			});
 		});
 }
+
+exports.received_messages = (req, res) => {
+	Message.find({
+			to: req.userData.user._id
+		}).then((messages) => {
+			if (messages.length > 0) {
+				return res.status(200).json({
+					messages,
+					message: 'Messages fetched successfuly',
+				});
+			}
+			return res.status(422).json({
+				messages,
+				errors: {
+					plain: 'No message found',
+				},
+			});
+		})
+		.catch((error) => {
+			return res.status(400).json({
+				errors: {
+					plain: 'Invalid request',
+					detailed: error.message
+				},
+			});
+		});
+}

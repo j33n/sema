@@ -334,6 +334,51 @@ describe("Message", () => {
 					done();
 				});
 		});
+
+		it('should alert when deleting an invalid item', (done) => {
+			chai.request(app)
+				.delete('/message/delete/1')
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					expect(res.body).to.have.property('errors').to.deep.include({
+						plain: 'Invalid request',
+					});
+					done();
+				});
+		});
+
+		it('should alert when deleting an invalid item with a valid mongo id', (done) => {
+			chai.request(app)
+				.delete('/message/delete/5cac4a535bf20bac85659506')
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(422);
+					res.body.should.be.a('object');
+					expect(res.body).to.have.property('errors').to.deep.include({
+						plain: 'No message found with that id',
+					});
+					done();
+				});
+		});
+
+		it('should delete a message successfuly', (done) => {
+			chai.request(app)
+				.delete(`/message/delete/${messageId}`)
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					expect(res.body).to.deep.include({
+						message: 'Message deleted successfuly',
+					});
+					expect(res.body).to.have.property('deleted').to.deep.include({
+						message: 'Hello!',
+					});
+					done();
+				});
+		});
 	});
 
 	afterEach(() => {

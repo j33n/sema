@@ -252,6 +252,47 @@ describe("Message", () => {
 					done();
 				});
 		});
+
+		it('should be able to fetch sent messages', (done) => {
+			chai.request(app)
+				.get('/message/sent')
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					expect(res.body).to.deep.include({
+						message: 'Messages fetched successfuly',
+					});
+					expect(res.body).to.have.property('messages').to.have.length(1);
+					done();
+				});
+		});
+
+		it('should be able to alert empty outbox', (done) => {
+			Message.deleteOne({
+				_id: messageId
+			}, (err, message) => {
+				if (err) throw err;
+				expect(message).to.deep.include({
+					n: 1,
+					ok: 1,
+					deletedCount: 1
+				})
+			});
+
+			chai.request(app)
+				.get('/message/sent')
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(422);
+					res.body.should.be.a('object');
+					expect(res.body).to.have.property('messages').to.have.length(0);
+					expect(res.body).to.have.property('errors').to.deep.include({
+						plain: 'No message found',
+					});
+					done();
+				});
+		});
 	});
 
 	afterEach(() => {

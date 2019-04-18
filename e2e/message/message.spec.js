@@ -4,6 +4,7 @@ const expect = require('chai').expect
 const app = require('../../app');
 
 const Users = require('../../models/users');
+const Message = require('../../models/message');
 
 // Configure chai
 chai.use(chaiHttp);
@@ -133,17 +134,17 @@ describe("Message", () => {
 		let messageId;
 		beforeEach((done) => {
 			chai.request(app)
-			.post('/message')
-			.set('x-access-token', token)
-			.send({
-				to: 'john.doe@test.com',
-				message: 'Hello!',
-			})
-			.end((err, res) => {
-				if (err) throw err;
-				messageId = res.body.user._id
-				done();
-			});
+				.post('/message')
+				.set('x-access-token', token)
+				.send({
+					to: 'john.doe@test.com',
+					message: 'Hello!',
+				})
+				.end((err, res) => {
+					if (err) throw err;
+					messageId = res.body.user._id
+					done();
+				});
 		});
 
 		it('should be able to read a specific message', (done) => {
@@ -181,9 +182,31 @@ describe("Message", () => {
 				.end((err, res) => {
 					res.should.have.status(422);
 					res.body.should.be.a('object');
-					console.log('res.body', res.body)
 					expect(res.body).to.have.property('errors').to.deep.include({
 						plain: 'Message not found'
+					});
+					done();
+				});
+		});
+
+		it('should mark the message as read after fetching it', (done) => {
+			Message.findById(messageId, (err, message) => {
+				if (err) throw err;
+				expect(message).to.deep.include({
+					message: 'Hello!',
+					read: false,
+				})
+			});
+
+			chai.request(app)
+				.get(`/message/${messageId}`)
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					expect(res.body).to.deep.include({
+						message: 'Hello!',
+						read: true,
 					});
 					done();
 				});

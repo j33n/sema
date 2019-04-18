@@ -128,4 +128,65 @@ describe("Message", () => {
 				done();
 			});
 	});
+
+	describe('Read message', () => {
+		let messageId;
+		beforeEach((done) => {
+			chai.request(app)
+			.post('/message')
+			.set('x-access-token', token)
+			.send({
+				to: 'john.doe@test.com',
+				message: 'Hello!',
+			})
+			.end((err, res) => {
+				if (err) throw err;
+				messageId = res.body.user._id
+				done();
+			});
+		});
+
+		it('should be able to read a specific message', (done) => {
+			chai.request(app)
+				.get(`/message/${messageId}`)
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					expect(res.body).to.deep.include({
+						message: 'Hello!'
+					});
+					done();
+				});
+		});
+
+		it('should spot invalid message id request', (done) => {
+			chai.request(app)
+				.get('/message/1')
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					expect(res.body).to.have.property('errors').to.deep.include({
+						plain: 'Invalid request'
+					});
+					done();
+				});
+		});
+
+		it('should spot valid mongoid but invalid message id', (done) => {
+			chai.request(app)
+				.get('/message/5cac4a535bf20bac85659506')
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(422);
+					res.body.should.be.a('object');
+					console.log('res.body', res.body)
+					expect(res.body).to.have.property('errors').to.deep.include({
+						plain: 'Message not found'
+					});
+					done();
+				});
+		});
+	});
 });

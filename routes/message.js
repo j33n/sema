@@ -33,8 +33,8 @@ const recipientValidation = oneOf(
 // Sending message
 router.post('/', recipientValidation, messageValidation, protectedRoute, message_controller.send_message);
 
-// Get specific message
-router.get('/:message_id', messageValidation, protectedRoute, message_controller.get_message);
+// Get/Read a specific message
+router.get('/:message_id', protectedRoute, message_controller.get_message);
 
 // Get all users messages
 router.get('/messages', protectedRoute, message_controller.get_message);

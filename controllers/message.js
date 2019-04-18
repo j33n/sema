@@ -153,3 +153,29 @@ exports.all_messages = (req, res) => {
 			});
 		});
 }
+
+exports.delete_message = (req, res) => {
+	Message.findOneAndDelete({
+			_id: req.params.message_id
+		}).then((deleted) => {
+			if (!deleted) {
+				return res.status(422).json({
+					errors: {
+						plain: 'No message found with that id',
+					},
+				});
+			}
+			return res.status(200).json({
+				deleted,
+				message: 'Message deleted successfuly',
+			});
+		})
+		.catch((error) => {
+			return res.status(400).json({
+				errors: {
+					plain: 'Invalid request',
+					detailed: error.message
+				},
+			});
+		});
+}

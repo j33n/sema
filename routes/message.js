@@ -38,6 +38,9 @@ router.post('/', recipientValidation, messageValidation, protectedRoute, message
 // Get/Read a specific message
 router.get('/read/:message_id', protectedRoute, message_controller.get_message);
 
+// Delete a specific message
+router.delete('/delete/:message_id', protectedRoute, message_controller.delete_message);
+
 // Get all messages
 router.get('/all', protectedRoute, message_controller.all_messages);
 
@@ -47,7 +50,7 @@ router.get('/received', protectedRoute, message_controller.received_messages);
 // Get all sent messages
 router.get('/sent', protectedRoute, message_controller.sent_messages);
 
-// Delete message
-router.delete('/delete_message/:message_id', protectedRoute, message_controller.get_message);
+// Delete a user and his occurences
+// router.delete('/delete/:message_id', protectedRoute, message_controller.delete_user);
 
 module.exports = router;

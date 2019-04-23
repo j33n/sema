@@ -61,6 +61,7 @@ exports.registration = function(req, res) {
 exports.login = function(req, res) {
 	// TODO: Save token and ensure it hasn't been used before
 	// TODO: Use a more secure token algorithm like RS256
+	// TODO: Save tokens, ensure once user is deleted token expires
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -104,6 +105,7 @@ exports.login = function(req, res) {
 				return res.status(200).json({
 					message: 'User authenticated successfully',
 					token,
+					user,
 				});
 			});
 		});

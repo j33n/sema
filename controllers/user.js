@@ -70,7 +70,13 @@ exports.login = function(req, res) {
 	}
 
 	Users.findOne({
-		username: req.body.username
+		$or: [{
+				username: req.body.username
+			},
+			{
+				phone: req.body.username
+			}
+		]
 	}, (error, user) => {
 		if (!user) {
 			return res.status(400).json({

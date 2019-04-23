@@ -14,6 +14,7 @@ describe("Message", () => {
 	// Test to get all students record
 
 	let token;
+	let user_id;
 
 	beforeEach((done) => {
 		// Create our Adam user 😆
@@ -26,6 +27,7 @@ describe("Message", () => {
 			})
 			.end((err, res) => {
 				if (err) throw err;
+				user_id = res.body._id;
 				done();
 			});
 	});
@@ -379,10 +381,67 @@ describe("Message", () => {
 					done();
 				});
 		});
+
+		it('should detect when invalid user is being deleted', (done) => {
+			chai.request(app)
+				.delete('/user/delete/1')
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(400);
+					res.body.should.be.a('object');
+					expect(res.body).to.have.property('errors').to.deep.include({
+						plain: 'Invalid request'
+					});
+					done();
+				});
+		});
+
+		it('should detect when invalid user is being deleted with valid mongo id', (done) => {
+			chai.request(app)
+				.delete('/user/delete/5cac4a535bf20bac85659506')
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(422);
+					res.body.should.be.a('object');
+					expect(res.body).to.have.property('errors').to.deep.include({
+						plain: 'No Users available with that id'
+					});
+					done();
+				});
+		});
+
+		it('should delete a user and messages associated', (done) => {
+			chai.request(app)
+				.delete(`/user/delete/${user_id}`)
+				.set('x-access-token', token)
+				.end((err, res) => {
+					res.should.have.status(200);
+					res.body.should.be.a('object');
+					expect(res.body).to.deep.include({
+						message: 'User account and a message associated to it were deleted',
+					});
+					done();
+				});
+		});
+	});
+
+	it('should delete a user even if there are no messages associated', (done) => {
+		chai.request(app)
+			.delete(`/user/delete/${user_id}`)
+			.set('x-access-token', token)
+			.end((err, res) => {
+				res.should.have.status(200);
+				res.body.should.be.a('object');
+				expect(res.body).to.deep.include({
+					message: 'User account deleted',
+				});
+				done();
+			});
 	});
 
 	afterEach(() => {
-		// Time to destroy our lovely messages 😢
+		// Time to destroy our lovely messages and users 😢
 		Message.deleteMany().exec();
+		Users.deleteMany().exec();
 	});
 });

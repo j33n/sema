@@ -44,4 +44,7 @@ router.post('/log-in', userLoginDetailsValidator, user_controller.login);
 // User listing
 router.get('/get-users', protectedRoute, user_controller.list_users);
 
+// Delete a user and his occurences
+router.delete('/delete/:user_id', protectedRoute, user_controller.delete_user);
+
 module.exports = router;

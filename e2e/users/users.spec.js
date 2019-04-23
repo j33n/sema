@@ -14,15 +14,15 @@ describe("Users", () => {
 		chai.request(app)
 			.post('/user/sign-up')
 			.send({
-				username: 'johndoe@test.com',
+				username: 'John Doe',
 				password: 'secret',
-				phone: '123456',
+				phone: '+250788435397',
 			})
 			.end((err, res) => {
 				res.should.have.status(201);
 				res.body.should.be.a('object');
 				expect(res.body).to.deep.include({
-					username: 'johndoe@test.com',
+					phone: '+250788435397',
 				});
 				done();
 			});
@@ -30,9 +30,9 @@ describe("Users", () => {
 
 	it('should not allow user account duplicates', (done) => {
 		const newUser = {
-			username: 'johndoe@test.com',
+			username: 'John Doe',
 			password: 'secret',
-			phone: '123456',
+			phone: '+250788435397',
 		};
 		Users.create(newUser);
 		chai.request(app)

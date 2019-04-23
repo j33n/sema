@@ -25,7 +25,13 @@ exports.registration = function(req, res) {
 	bcrypt.hash(req.body.password, parseInt(BCRYPT_SALT_ROUNDS))
 		.then(function(hash) {
 			Users.find({
-				username: req.body.username
+				$or: [{
+						username: req.body.username
+					},
+					{
+						phone: req.body.phone
+					}
+				]
 			}, (error, user) => {
 				if (error) {
 					return res.status(400).json({

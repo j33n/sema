@@ -23,7 +23,7 @@ describe("Message", () => {
 			.send({
 				username: 'john.doe@test.com',
 				password: 'secret',
-				phone: '12345'
+				phone: '+250788435397'
 			})
 			.end((err, res) => {
 				if (err) throw err;

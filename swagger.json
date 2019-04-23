@@ -93,21 +93,82 @@
 					}
 				}
 			}
+		},
+		"/user/get-users": {
+			"get": {
+				"tags": [
+					"user"
+				],
+				"summary": "Fetch all users",
+				"description": "",
+				"operationId": "fetchUsers",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Users fetched successfuly"
+					},
+					"400": {
+						"description": "No users available at the moment"
+					},
+					"401": {
+						"description": "Authentication is required"
+					}
+				},
+				"security": [{
+					"sema_auth": []
+				}]
+			}
+		},
+		"/user/delete/{userId}": {
+			"delete": {
+				"tags": [
+					"user"
+				],
+				"summary": "Delete a user and related activities",
+				"description": "",
+				"operationId": "deleteUser",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [{
+					"in": "path",
+					"name": "userId",
+					"description": "Targeted user id, find one under /user/log-in response",
+					"required": true,
+					"default": "5cbedfa8a128768ac15d75ac"
+				}],
+				"responses": {
+					"200": {
+						"description": "Users deleted successfuly"
+					},
+					"400": {
+						"description": "Invalid user id"
+					},
+					"401": {
+						"description": "Authentication is required"
+					},
+					"422": {
+						"description": "No user with that id found"
+					}
+				},
+				"security": [{
+					"sema_auth": []
+				}]
+			}
 		}
 	},
 	"securityDefinitions": {
-		"petstore_auth": {
-			"type": "oauth2",
-			"authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
-			"flow": "implicit",
-			"scopes": {
-				"write:pets": "modify pets in your account",
-				"read:pets": "read your pets"
-			}
-		},
-		"api_key": {
+		"sema_auth": {
 			"type": "apiKey",
-			"name": "api_key",
+			"name": "x-access-token",
 			"in": "header"
 		}
 	},

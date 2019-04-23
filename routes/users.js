@@ -16,8 +16,10 @@ require('dotenv').config();
 const user_controller = require('../controllers/user');
 
 const commonValidations = [
-	// username must be an email
-	check('username').isEmail(),
+	// username can be an email or names ❤️
+	check('username').isLength({
+		min: 2
+	}),
 	// password must be at least 5 chars long
 	check('password').isLength({
 		min: 5
@@ -26,9 +28,7 @@ const commonValidations = [
 
 const userRegistrationDetailsValidator = [
 	...commonValidations,
-	check('phone').isInt().isLength({
-		min: 5
-	}),
+	check('phone').isMobilePhone(),
 ];
 
 const userLoginDetailsValidator = commonValidations;

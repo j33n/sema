@@ -13,6 +13,9 @@ require('./config/db')
 
 const app = express();
 
+const swaggerUi = require('swagger-ui-express'),
+  swaggerDocument = require('./swagger.json');
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({
@@ -21,6 +24,8 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Documentation routing
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Routing
 app.use('/', indexRouter);
 app.use('/user', usersRouter);

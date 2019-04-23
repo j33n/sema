@@ -14,7 +14,7 @@ describe("Users", () => {
 			.post('/user/sign-up')
 			.send({
 				password: 'test',
-				username: 'lorem'
+				username: 'l'
 			})
 			.end((err, res) => {
 				res.should.have.status(422);
@@ -22,7 +22,18 @@ describe("Users", () => {
 				expect(res.body).to.haveOwnProperty('errors').to.be.an('array').to.deep.include({
 					location: 'body',
 					param: 'username',
-					value: 'lorem',
+					value: 'l',
+					msg: 'Invalid value'
+				});
+				expect(res.body).to.haveOwnProperty('errors').to.be.an('array').to.deep.include({
+					location: 'body',
+					param: 'password',
+					value: 'test',
+					msg: 'Invalid value'
+				});
+				expect(res.body).to.haveOwnProperty('errors').to.be.an('array').to.deep.include({
+					location: 'body',
+					param: 'phone',
 					msg: 'Invalid value'
 				});
 				done();

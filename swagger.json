@@ -55,13 +55,43 @@
 					"400": {
 						"description": "User account already exists"
 					}
-				},
-				"security": [{
-					"petstore_auth": [
-						"write:pets",
-						"read:pets"
-					]
-				}]
+				}
+			}
+		},
+		"/user/log-in": {
+			"post": {
+				"tags": [
+					"user"
+				],
+				"summary": "Authenticate a user",
+				"description": "",
+				"operationId": "authenticateUser",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [{
+					"in": "body",
+					"name": "body",
+					"description": "User details for authentication",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/Authenticate"
+					}
+				}],
+				"responses": {
+					"200": {
+						"description": "Authentication was successfuly"
+					},
+					"422": {
+						"description": "Invalid username/password supplied"
+					},
+					"400": {
+						"description": "Invalid user credentials"
+					}
+				}
 			}
 		}
 	},
@@ -98,6 +128,21 @@
 				},
 				"password": {
 					"description": "A secure and memorable password",
+					"required": true,
+					"type": "string",
+					"example": "secret123"
+				}
+			}
+		},
+		"Authenticate": {
+			"type": "object",
+			"properties": {
+				"username": {
+					"required": true,
+					"type": "string",
+					"example": "John Doe"
+				},
+				"password": {
 					"required": true,
 					"type": "string",
 					"example": "secret123"

@@ -50,7 +50,4 @@ router.get('/received', protectedRoute, message_controller.received_messages);
 // Get all sent messages
 router.get('/sent', protectedRoute, message_controller.sent_messages);
 
-// Delete a user and his occurences
-// router.delete('/delete/:message_id', protectedRoute, message_controller.delete_user);
-
 module.exports = router;

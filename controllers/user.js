@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const Users = require('../models/users');
+const Message = require('../models/message');
 
 const {
 	BCRYPT_SALT_ROUNDS,
@@ -111,3 +112,44 @@ exports.list_users = function(req, res) {
 		})
 	})
 };
+
+// Delete a user account
+exports.delete_user = (req, res) => {
+	Users.findByIdAndDelete(req.params.user_id)
+		.then((deletedUser) => {
+			if (!deletedUser) {
+				return res.status(422).json({
+					errors: {
+						plain: 'No Users available with that id',
+					}
+				});
+			}
+			Message.find({
+				$or: [{
+						from: deletedUser._id
+					},
+					{
+						to: deletedUser._id
+					}
+				]
+			}).then((deletedMessage) => {
+				let message;
+				if (deletedMessage.length === 0) message = 'User account deleted';
+				if (deletedMessage.length === 1) message = 'User account and a message associated to it were deleted'
+				if (deletedMessage.length > 1) message = `User account and ${deletedMessage.length} messages associated to it were deleted`
+				return res.status(200).json({
+					users: deletedUser,
+					message,
+				})
+			});
+
+		})
+		.catch((error) => {
+			return res.status(400).json({
+				errors: {
+					plain: 'Invalid request',
+					detailed: error.message
+				},
+			});
+		});
+}

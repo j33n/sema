@@ -27,19 +27,5 @@ const MessageSchema = new Schema({
 	},
 });
 
-// Virtual for message sent.
-MessageSchema
-	.virtual('messageSent')
-	.get(function() {
-		return this.message;
-	});
-
-// Virtual for this author instance URL.
-MessageSchema
-	.virtual('url')
-	.get(function() {
-		return '/message/' + this._id
-	});
-
 // Export Message model.
 module.exports = mongoose.model('Message', MessageSchema);

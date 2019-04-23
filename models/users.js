@@ -20,19 +20,5 @@ const UsersSchema = new Schema({
 	},
 });
 
-// Virtual for user username.
-UsersSchema
-	.virtual('name')
-	.get(function() {
-		return this.username;
-	});
-
-// Virtual for this user instance url
-UsersSchema
-	.virtual('url')
-	.get(function() {
-		return '/users/' + this._id
-	});
-
 // Export Users model.
 module.exports = mongoose.model('Users', UsersSchema);

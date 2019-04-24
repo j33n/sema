@@ -27,7 +27,7 @@ describe("Message", () => {
 			})
 			.end((err, res) => {
 				if (err) throw err;
-				user_id = res.body._id;
+				user_id = res.body.user._id;
 				done();
 			});
 	});
@@ -144,7 +144,7 @@ describe("Message", () => {
 				})
 				.end((err, res) => {
 					if (err) throw err;
-					messageId = res.body.user._id
+					messageId = res.body.body._id
 					done();
 				});
 		});

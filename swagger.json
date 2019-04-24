@@ -15,9 +15,14 @@
 	"host": "localhost:3000",
 	"basePath": "/",
 	"tags": [{
-		"name": "user",
-		"description": "Create and manage your account"
-	}],
+			"name": "user",
+			"description": "Create and manage your account"
+		},
+		{
+			"name": "message",
+			"description": "Send, receive and manage messages"
+		}
+	],
 	"schemes": [
 		"http"
 	],
@@ -163,6 +168,45 @@
 					"sema_auth": []
 				}]
 			}
+		},
+		"/message": {
+			"post": {
+				"tags": [
+					"message"
+				],
+				"summary": "Send a message to another user",
+				"description": "",
+				"operationId": "sendMessage",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [{
+					"in": "body",
+					"name": "body",
+					"description": "Content of the message to be sent",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/Message"
+					}
+				}],
+				"responses": {
+					"201": {
+						"description": "Message sent!"
+					},
+					"400": {
+						"description": "User not found"
+					},
+					"401": {
+						"description": "Authentication is required"
+					}
+				},
+				"security": [{
+					"sema_auth": []
+				}]
+			}
 		}
 	},
 	"securityDefinitions": {
@@ -207,6 +251,21 @@
 					"required": true,
 					"type": "string",
 					"example": "secret123"
+				}
+			}
+		},
+		"Message": {
+			"type": "object",
+			"properties": {
+				"to": {
+					"required": true,
+					"type": "string",
+					"example": "+250788435367"
+				},
+				"message": {
+					"required": true,
+					"type": "string",
+					"example": "Hello ✌️"
 				}
 			}
 		}

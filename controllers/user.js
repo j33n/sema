@@ -47,7 +47,13 @@ exports.registration = function(req, res) {
 					username: req.body.username,
 					phone: req.body.phone,
 					password: hash,
-				}).then(user => res.status(201).json(user));
+				}).then(user => {
+					const { _id, username, phone } = user;
+					return res.status(201).json({
+						message: 'User account created successfuly',
+						user: { _id, username, phone }
+					})
+				});
 			});
 
 		}).catch(function(error) {
@@ -102,10 +108,12 @@ exports.login = function(req, res) {
 						errors: err.message
 					});
 				}
+				// Filter from the user object only needed data
+				const { _id, username, phone } = user;
 				return res.status(200).json({
 					message: 'User authenticated successfully',
 					token,
-					user,
+					user: { _id, username, phone },
 				});
 			});
 		});

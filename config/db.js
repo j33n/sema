@@ -5,14 +5,21 @@
 //Import the mongoose module
 const mongoose = require('mongoose');
 const envConfig = require('../config/env');
-const Users = require('../models/users')
+const Users = require('../models/users');
+const Message = require('../models/message');
 
 //Set up default mongoose connection
 
 const mongoDB = envConfig.db;
 
+console.log('mongoDB :---------------------------------', mongoDB);
+
 mongoose.connect(mongoDB, {
-	useNewUrlParser: true
+	useNewUrlParser: true,
+	connectTimeoutMS: 10000,
+	socketTimeoutMS: 45000,
+	reconnectInterval: 500,
+	poolSize: 10,
 });
 
 //Get the default connection
@@ -26,6 +33,7 @@ db.once('open', function() {
 		function clearDB(done) {
 			const promises = [
 				Users.deleteMany().exec(),
+				Message.deleteMany().exec(),
 			];
 
 			Promise.all(promises)

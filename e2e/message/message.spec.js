@@ -41,6 +41,7 @@ describe("Message", () => {
 				password: 'secret',
 			})
 			.end((err, res) => {
+				
 				if (err) throw err;
 				token = res.body.token;
 				return done(null, res)

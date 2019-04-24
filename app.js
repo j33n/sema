@@ -53,3 +53,4 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 //TODO: Change from displaying user details in Id form to their specific phone number or user email
+// TODO: Another user might be able to delete your account 😕

@@ -21,8 +21,12 @@ describe("Users", () => {
 			.end((err, res) => {
 				res.should.have.status(201);
 				res.body.should.be.a('object');
-				expect(res.body).to.deep.include({
+				expect(res.body).to.have.property('user').to.deep.include({
 					phone: '+250788435397',
+					username: 'John Doe',
+				});
+				expect(res.body).to.deep.include({
+					message: 'User account created successfuly',
 				});
 				done();
 			});

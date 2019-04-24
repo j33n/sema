@@ -29,10 +29,25 @@ exports.send_message = (req, res) => {
 					message: req.body.message,
 					read: 0,
 				})
-				.then(user => res.status(201).json({
-					user,
-					message: 'Message sent!'
-				}))
+				.then(messageSent => {
+					const {
+						_id,
+						from,
+						to,
+						message,
+						read
+					} = messageSent;
+					return res.status(201).json({
+						body: {
+							_id,
+							from,
+							to,
+							message,
+							read
+						},
+						message: 'Message sent!'
+					});
+				})
 				.catch((err) => res.status(400).json({
 					errors: {
 						plain: 'Unable to save message',

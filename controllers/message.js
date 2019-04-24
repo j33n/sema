@@ -145,7 +145,13 @@ exports.sent_messages = (req, res) => {
 }
 
 exports.all_messages = (req, res) => {
-	Message.find({}).then((messages) => {
+	Message.find({
+			$or: [{
+				to: req.userData.user._id
+			}, {
+				from: req.userData.user._id
+			}]
+		}).then((messages) => {
 			if (messages.length > 0) {
 				return res.status(200).json({
 					messages,

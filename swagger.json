@@ -207,6 +207,148 @@
 					"sema_auth": []
 				}]
 			}
+		},
+		"/message/read/{messageId}": {
+			"get": {
+				"tags": [
+					"message"
+				],
+				"summary": "Read a message and display it as read",
+				"description": "",
+				"operationId": "readMessage",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [{
+					"in": "path",
+					"name": "messageId",
+					"description": "Id of the message to read",
+					"required": true,
+					"default": "5cc0252b396b112759fd1e9d"
+				}],
+				"responses": {
+					"200": {
+						"description": "Message successfuly read"
+					},
+					"400": {
+						"description": "Invalid request"
+					},
+					"401": {
+						"description": "Authentication is required"
+					},
+					"422": {
+						"description": "Message not found"
+					}
+				},
+				"security": [{
+					"sema_auth": []
+				}]
+			}
+		},
+		"/message/received": {
+			"get": {
+				"tags": [
+					"message"
+				],
+				"summary": "Retrieve all received messages",
+				"description": "",
+				"operationId": "receivedMessages",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Received messages retrieved successfuly!"
+					},
+					"400": {
+						"description": "Invalid request"
+					},
+					"401": {
+						"description": "Authentication is required"
+					},
+					"422": {
+						"description": "No Messages found"
+					}
+				},
+				"security": [{
+					"sema_auth": []
+				}]
+			}
+		},
+		"/message/sent": {
+			"get": {
+				"tags": [
+					"message"
+				],
+				"summary": "Retrieve all sent messages",
+				"description": "",
+				"operationId": "sentMessages",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Sent messages retrieved successfuly!"
+					},
+					"400": {
+						"description": "Invalid request"
+					},
+					"401": {
+						"description": "Authentication is required"
+					},
+					"422": {
+						"description": "No Messages found"
+					}
+				},
+				"security": [{
+					"sema_auth": []
+				}]
+			}
+		},
+		"/message/all": {
+			"get": {
+				"tags": [
+					"message"
+				],
+				"summary": "Retrieve all messages",
+				"description": "",
+				"operationId": "allMessages",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "All messages retrieved successfuly!"
+					},
+					"400": {
+						"description": "Invalid request"
+					},
+					"401": {
+						"description": "Authentication is required"
+					},
+					"422": {
+						"description": "No Messages found"
+					}
+				},
+				"security": [{
+					"sema_auth": []
+				}]
+			}
 		}
 	},
 	"securityDefinitions": {

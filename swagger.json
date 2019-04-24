@@ -248,6 +248,46 @@
 				}]
 			}
 		},
+		"/message/delete/{messageId}": {
+			"delete": {
+				"tags": [
+					"message"
+				],
+				"summary": "Delete a specific message",
+				"description": "",
+				"operationId": "deleteMessage",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [{
+					"in": "path",
+					"name": "messageId",
+					"description": "Id of the message to delete",
+					"required": true,
+					"default": "5cc0252b396b112759fd1e9d"
+				}],
+				"responses": {
+					"200": {
+						"description": "Message successfuly deleted 😔"
+					},
+					"400": {
+						"description": "Invalid request"
+					},
+					"401": {
+						"description": "Authentication is required"
+					},
+					"422": {
+						"description": "Message not found"
+					}
+				},
+				"security": [{
+					"sema_auth": []
+				}]
+			}
+		},
 		"/message/received": {
 			"get": {
 				"tags": [

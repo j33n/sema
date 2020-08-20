@@ -11,7 +11,7 @@
     "test-cov": "nyc --exclude 'e2e/**' --reporter text --reporter html yarn test"
   },
   "dependencies": {
-    "bcrypt": "^3.0.5",
+    "bcrypt": "^5.0.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^7.0.0",
